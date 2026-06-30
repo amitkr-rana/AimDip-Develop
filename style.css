@@ -1,0 +1,13 @@
+.main{
+  height: 300px;
+  width: 300px;
+background-color: blueviolet;
+animation-name: ;
+
+
+
+}
+.main:active{
+background-color: aqua;
+}
+
