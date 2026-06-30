@@ -1,0 +1,1985 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Syllabus Form</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+  background:linear-gradient(135deg,#667eea,#764ba2,#ff758c,#ff7eb3);
+  background-size:300% 300%;
+  animation:bgMove 12s ease infinite;
+  font-family:Segoe UI,sans-serif;
+  overflow-x:hidden;
+}
+
+@keyframes bgMove{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+
+.box{
+  width:100%;
+  max-width:420px;
+  padding:30px;
+  border-radius:22px;
+  background:rgba(255,255,255,0.15);
+  backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,0.25);
+  box-shadow:0 25px 60px rgba(0,0,0,0.35);
+  transition:all .4s ease;
+}
+
+h2{
+  text-align:center;
+  margin-bottom:20px;
+  color:#fff;
+}
+
+input,select,button{
+  width:100%;
+  padding:14px;
+  margin-top:14px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,0.4);
+  background:rgba(255,255,255,0.25);
+  font-size:14px;
+  outline:none;
+}
+
+input,select{
+  color:#fff;
+}
+
+select option{
+  color:#000;
+}
+
+input::placeholder{
+  color:#f1f1f1;
+}
+
+input:focus,select:focus{
+  border:1px solid #fff;
+  box-shadow:0 0 0 2px rgba(255,255,255,0.3);
+}
+
+button{
+  margin-top:18px;
+  border:none;
+  font-weight:600;
+  cursor:pointer;
+  background:linear-gradient(135deg,#ff6a00,#ee0979);
+  color:#fff;
+  box-shadow:0 10px 25px rgba(0,0,0,0.3);
+  transition:all .3s ease;
+}
+
+button:hover{
+  transform:translateY(-2px);
+}
+
+
+</style>
+</head>
+
+<body>
+
+<div class="box">
+<h2>📘 Syllabus Form</h2>
+
+<form id="syllabusForm">
+
+<input name="name" placeholder="Name" required>
+<input name="phone" placeholder="Phone Number" required>
+<input name="email" placeholder="Email" required>
+
+<select name="state" id="state" onchange="stateChange()" required>
+<option value="">Select State</option>
+<option value="Andhra Pradesh">Andhra Pradesh</option>
+<option value="Arunachal Pradesh">Arunachal Pradesh</option>
+<option value="Assam">Assam</option>
+<option value="Bihar">Bihar</option>
+<option value="Chhattisgarh">Chhattisgarh</option>
+<option value="Goa">Goa</option>
+<option value="Gujarat">Gujarat</option>
+<option value="Haryana">Haryana</option>
+<option value="Himachal Pradesh">Himachal Pradesh</option>
+<option value="Jharkhand">Jharkhand</option>
+<option value="Karnataka">Karnataka</option>
+<option value="Kerala">Kerala</option>
+<option value="Madhya Pradesh">Madhya Pradesh</option>
+<option value="Maharashtra">Maharashtra</option>
+<option value="Manipur">Manipur</option>
+<option value="Meghalaya">Meghalaya</option>
+<option value="Mizoram">Mizoram</option>
+<option value="Nagaland">Nagaland</option>
+<option value="Odisha">Odisha</option>
+<option value="Punjab">Punjab</option>
+<option value="Rajasthan">Rajasthan</option>
+<option value="Sikkim">Sikkim</option>
+<option value="Tamil Nadu">Tamil Nadu</option>
+<option value="Telangana">Telangana</option>
+<option value="Tripura">Tripura</option>
+<option value="Uttar Pradesh">Uttar Pradesh</option>
+<option value="Uttarakhand">Uttarakhand</option>
+<option value="West Bengal">West Bengal</option>
+
+</select>
+
+<select name="universityType" id="universityType" onchange="typeChange()" required>
+<option value="">University Type</option>
+<option value="Central">Central</option>
+<option value="State">State</option>
+<option value="Private">Private</option>
+<!-- <option value="All">All</option> -->
+</select>
+
+<select name="university" id="university" onchange="universityChange()" required>
+<option value="">Select University</option>
+</select>
+
+<select name="course" id="course" onchange="courseChange()" required>
+<option value="">Course</option>
+</select>
+
+<select name="program" id="program" required>
+<option value="">Program</option>
+</select>
+
+
+<select name="subject" id="subject" style="display:none;">
+<option value="">Subject</option>
+<option>History</option>
+<option>Geography</option>
+<option>Political Science</option>
+<option>Economics</option>
+<option>Sociology</option>
+<option>Psychology</option>
+<option>Philosophy</option>
+<option>English</option>
+<option>Hindi</option>
+<option>Urdu</option>
+<option>Sanskrit</option>
+<option>Maithili</option>
+<option>Mathematics</option>
+<option>Statistics</option>
+<option>Physics</option>
+<option>Chemistry</option>
+<option>Botany</option>
+<option>Zoology</option>
+<option>Environmental Science</option>
+<option>Computer Science</option>
+<option>Information Technology</option>
+<option>Life Science</option>
+<option>Geology</option>
+<option>Agriculture</option>
+<option>Education</option>
+<option>Home Science</option>
+<option>Physical Education</option>
+<option>Journalism & Mass Communication</option>
+<option>Social Work</option>
+<option>Commerce</option>
+
+</select>
+
+<button type="submit">Submit</button>
+</form>
+</div>
+
+</script>
+
+<!-- 👇👇 YAHAN ADD KARNA HAI 👇👇 -->
+
+
+
+<script>
+document.getElementById("syllabusForm").addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  const data = Object.fromEntries(new FormData(this).entries());
+
+  /* 🔥 FIX 1: "All" ko automatically Private bana do
+     (Kyuki Amity Private me hai) */
+
+  if (data.universityType === "All") {
+    data.universityType = "Private";
+  }
+
+  /* 🔥 FIX 2: Integrated ke case me subject = program */
+  if (data.course === "INT") {
+    data.subject = data.program;
+  }
+
+  const response = await fetch("http://localhost:3000/submit", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  const result = await response.json();
+
+  if (result.redirectUrl) {
+    window.location.href = result.redirectUrl;
+  } else {
+    alert("Something went wrong");
+  }
+});
+</script>
+
+<script>
+
+
+const universityProgramSubject = {
+
+  /* =======================
+     STATE UNIVERSITIES
+  ======================= */
+
+  "Patna University": {
+    UG: {
+     BA: [
+  "History",
+  "Geography",
+  "Political Science",
+  "Economics",
+  "Sociology",
+  "Psychology",
+  "Philosophy",
+  "English",
+  "Hindi",
+  "Urdu",
+  "Sanskrit",
+  "Maithili",
+  "Education",
+  "Home Science",
+  "Journalism & Mass Communication",
+  "Social Work"
+],
+      BSc: [
+  "Physics",
+  "Chemistry",
+  "Mathematics",
+  "Statistics",
+  "Botany",
+  "Zoology",
+  "Geology",
+  "AI"
+],
+      BCom: ["Commerce"],
+      BJMC:["Mass_Communication"],
+      BLib:["blib"],
+      BBALLB:["baallb"],
+    },
+    PG: {
+     MA: [
+  "History",
+  "Geography",
+  "Political Science",
+  "Economics",
+  "Sociology",
+  "Psychology",
+  "Philosophy",
+  "English",
+  "Hindi",
+  "Urdu",
+  "Sanskrit",
+  "Maithili",
+  "Journalism & Mass Communication",
+  "Social Work"
+],
+      MSc: [
+  "Physics",
+  "Chemistry",
+  "Mathematics",
+  "Statistics",
+  "Botany",
+  "Zoology",
+  "Geology",
+  "Environmental Science",
+  "Computer Science"
+],
+   
+SocialWork:["social_work"],
+GandhianPeaceStudies:["peace_studies"],
+MAJMC:["majmc"],
+MLib:["mlib"],
+MCom:["commerce"],
+},
+    PRO:[
+      "BBA",
+  "BCA",
+  "MBA",
+  "MCA",
+  "LLB",
+  "BA LLB",
+  "B.Ed"
+  ],
+
+  },
+
+  "Magadh University": {
+  
+       UG: {
+     BA: [
+  "History",
+  "Geography",
+  "Political Science",
+  "Economics",
+  "Sociology",
+  "Psychology",
+  "Philosophy",
+  "English",
+  "Hindi",
+  "Urdu",
+  "Sanskrit",
+  "Maithili",
+  "Education",
+  "Home Science",
+  "Journalism & Mass Communication",
+  "Social Work"
+],
+      BSc: [
+  "Physics",
+  "Chemistry",
+  "Mathematics",
+  "Statistics",
+  "Botany",
+  "Zoology",
+  "Geology",
+  "AI"
+],
+      BCom: ["Commerce"],
+      BJMC:["Mass_Communication"],
+      BLib:["blib"],
+      BBALLB:["baallb"],
+    },
+    PG: {
+     MA: [
+  "History",
+  "Geography",
+  "Political Science",
+  "Economics",
+  "Sociology",
+  "Psychology",
+  "Philosophy",
+  "English",
+  "Hindi",
+  "Urdu",
+  "Sanskrit",
+  "Maithili",
+  "Journalism & Mass Communication",
+  "Social Work"
+],
+      MSc: [
+  "Physics",
+  "Chemistry",
+  "Mathematics",
+  "Statistics",
+  "Botany",
+  "Zoology",
+  "Geology",
+  "Environmental Science",
+  "Computer Science"
+],
+   
+SocialWork:["social_work"],
+GandhianPeaceStudies:["peace_studies"],
+MAJMC:["majmc"],
+MLib:["mlib"],
+MCom:["commerce"],
+},
+    PRO:[
+      "BBA",
+  "BCA",
+  "MBA",
+  "MCA",
+  "LLB",
+  "BA LLB",
+  "B.Ed"
+  ],
+
+  },
+
+  "Babasaheb Bhimrao Ambedkar Bihar University (BRABU)": {
+          UG: {
+     BA: [
+  "History",
+  "Geography",
+  "Political Science",
+  "Economics",
+  "Sociology",
+  "Psychology",
+  "Philosophy",
+  "English",
+  "Hindi",
+  "Urdu",
+  "Sanskrit",
+  "Maithili",
+  "Education",
+  "Home Science",
+  "Journalism & Mass Communication",
+  "Social Work"
+],
+      BSc: [
+  "Physics",
+  "Chemistry",
+  "Mathematics",
+  "Statistics",
+  "Botany",
+  "Zoology",
+  "Geology",
+  "AI"
+],
+      BCom: ["Commerce"],
+      BJMC:["Mass_Communication"],
+      BLib:["blib"],
+      BBALLB:["baallb"],
+    },
+    PG: {
+     MA: [
+  "History",
+  "Geography",
+  "Political Science",
+  "Economics",
+  "Sociology",
+  "Psychology",
+  "Philosophy",
+  "English",
+  "Hindi",
+  "Urdu",
+  "Sanskrit",
+  "Maithili",
+  "Journalism & Mass Communication",
+  "Social Work"
+],
+      MSc: [
+  "Physics",
+  "Chemistry",
+  "Mathematics",
+  "Statistics",
+  "Botany",
+  "Zoology",
+  "Geology",
+  "Environmental Science",
+  "Computer Science"
+],
+   
+SocialWork:["social_work"],
+GandhianPeaceStudies:["peace_studies"],
+MAJMC:["majmc"],
+MLib:["mlib"],
+MCom:["commerce"],
+},
+    PRO:[
+      "BBA",
+  "BCA",
+  "MBA",
+  "MCA",
+  "LLB",
+  "BA LLB",
+  "B.Ed"
+  ],
+
+  },
+
+   "Tilka Manjhi Bhagalpur University": {
+  
+        UG: {
+     BA: [
+  "History",
+  "Geography",
+  "Political Science",
+  "Economics",
+  "Sociology",
+  "Psychology",
+  "Philosophy",
+  "English",
+  "Hindi",
+  "Urdu",
+  "Sanskrit",
+  "Maithili",
+  "Education",
+  "Home Science",
+  "Journalism & Mass Communication",
+  "Social Work"
+],
+      BSc: [
+  "Physics",
+  "Chemistry",
+  "Mathematics",
+  "Statistics",
+  "Botany",
+  "Zoology",
+  "Geology",
+  "AI"
+],
+      BCom: ["Commerce"],
+      BJMC:["Mass_Communication"],
+      BLib:["blib"],
+      BBALLB:["baallb"],
+    },
+    PG: {
+     MA: [
+  "History",
+  "Geography",
+  "Political Science",
+  "Economics",
+  "Sociology",
+  "Psychology",
+  "Philosophy",
+  "English",
+  "Hindi",
+  "Urdu",
+  "Sanskrit",
+  "Maithili",
+  "Journalism & Mass Communication",
+  "Social Work"
+],
+      MSc: [
+  "Physics",
+  "Chemistry",
+  "Mathematics",
+  "Statistics",
+  "Botany",
+  "Zoology",
+  "Geology",
+  "Environmental Science",
+  "Computer Science"
+],
+   
+SocialWork:["social_work"],
+GandhianPeaceStudies:["peace_studies"],
+MAJMC:["majmc"],
+MLib:["mlib"],
+MCom:["commerce"],
+},
+  
+  },
+
+   "Lalit Narayan Mithila University": {
+  
+        UG: {
+     BA: [
+  "History",
+  "Geography",
+  "Political Science",
+  "Economics",
+  "Sociology",
+  "Psychology",
+  "Philosophy",
+  "English",
+  "Hindi",
+  "Urdu",
+  "Sanskrit",
+  "Maithili",
+  "Education",
+  "Home Science",
+  "Journalism & Mass Communication",
+  "Social Work"
+],
+      BSc: [
+  "Physics",
+  "Chemistry",
+  "Mathematics",
+  "Statistics",
+  "Botany",
+  "Zoology",
+  "Geology",
+  "AI"
+],
+      BCom: ["Commerce"],
+      BJMC:["Mass_Communication"],
+      BLib:["blib"],
+      BBALLB:["baallb"],
+    },
+    PG: {
+     MA: [
+  "History",
+  "Geography",
+  "Political Science",
+  "Economics",
+  "Sociology",
+  "Psychology",
+  "Philosophy",
+  "English",
+  "Hindi",
+  "Urdu",
+  "Sanskrit",
+  "Maithili",
+  "Journalism & Mass Communication",
+  "Social Work"
+],
+      MSc: [
+  "Physics",
+  "Chemistry",
+  "Mathematics",
+  "Statistics",
+  "Botany",
+  "Zoology",
+  "Geology",
+  "Environmental Science",
+  "Computer Science"
+],
+   
+SocialWork:["social_work"],
+GandhianPeaceStudies:["peace_studies"],
+MAJMC:["majmc"],
+MLib:["mlib"],
+MCom:["commerce"],
+},
+    PRO:[
+      "BBA",
+  "BCA",
+  "MBA",
+  "MCA",
+  "LLB",
+  "BA LLB",
+  "B.Ed"
+  ],
+
+  },
+
+ "Veer Kunwar Singh University": {
+  
+       UG: {
+     BA: [
+  "History",
+  "Geography",
+  "Political Science",
+  "Economics",
+  "Sociology",
+  "Psychology",
+  "Philosophy",
+  "English",
+  "Hindi",
+  "Urdu",
+  "Sanskrit",
+  "Maithili",
+  "Education",
+  "Home Science",
+  "Journalism & Mass Communication",
+  "Social Work"
+],
+      BSc: [
+  "Physics",
+  "Chemistry",
+  "Mathematics",
+  "Statistics",
+  "Botany",
+  "Zoology",
+  "Geology",
+  "AI"
+],
+      BCom: ["Commerce"],
+      BJMC:["Mass_Communication"],
+      BLib:["blib"],
+      BBALLB:["baallb"],
+    },
+    PG: {
+     MA: [
+  "History",
+  "Geography",
+  "Political Science",
+  "Economics",
+  "Sociology",
+  "Psychology",
+  "Philosophy",
+  "English",
+  "Hindi",
+  "Urdu",
+  "Sanskrit",
+  "Maithili",
+  "Journalism & Mass Communication",
+  "Social Work"
+],
+      MSc: [
+  "Physics",
+  "Chemistry",
+  "Mathematics",
+  "Statistics",
+  "Botany",
+  "Zoology",
+  "Geology",
+  "Environmental Science",
+  "Computer Science"
+],
+   
+SocialWork:["social_work"],
+GandhianPeaceStudies:["peace_studies"],
+MAJMC:["majmc"],
+MLib:["mlib"],
+MCom:["commerce"],
+},
+    PRO:[
+      "BBA",
+  "BCA",
+  "MBA",
+  "MCA",
+  "LLB",
+  "BA LLB",
+  "B.Ed"
+  ],
+
+  },
+
+ "Jai Prakash University": {
+  
+       UG: {
+     BA: [
+  "History",
+  "Geography",
+  "Political Science",
+  "Economics",
+  "Sociology",
+  "Psychology",
+  "Philosophy",
+  "English",
+  "Hindi",
+  "Urdu",
+  "Sanskrit",
+  "Maithili",
+  "Education",
+  "Home Science",
+  "Journalism & Mass Communication",
+  "Social Work"
+],
+      BSc: [
+  "Physics",
+  "Chemistry",
+  "Mathematics",
+  "Statistics",
+  "Botany",
+  "Zoology",
+  "Geology",
+  "AI"
+],
+      BCom: ["Commerce"],
+      BJMC:["Mass_Communication"],
+      BLib:["blib"],
+      BBALLB:["baallb"],
+    },
+    PG: {
+     MA: [
+  "History",
+  "Geography",
+  "Political Science",
+  "Economics",
+  "Sociology",
+  "Psychology",
+  "Philosophy",
+  "English",
+  "Hindi",
+  "Urdu",
+  "Sanskrit",
+  "Maithili",
+  "Journalism & Mass Communication",
+  "Social Work"
+],
+      MSc: [
+  "Physics",
+  "Chemistry",
+  "Mathematics",
+  "Statistics",
+  "Botany",
+  "Zoology",
+  "Geology",
+  "Environmental Science",
+  "Computer Science"
+],
+   
+SocialWork:["social_work"],
+GandhianPeaceStudies:["peace_studies"],
+MAJMC:["majmc"],
+MLib:["mlib"],
+MCom:["commerce"],
+},
+
+
+  },
+
+  "Purnea University": {
+  
+      UG: {
+     BA: [
+  "History",
+  "Geography",
+  "Political Science",
+  "Economics",
+  "Sociology",
+  "Psychology",
+  "Philosophy",
+  "English",
+  "Hindi",
+  "Urdu",
+  "Sanskrit",
+  "Maithili",
+  "Education",
+  "Home Science",
+  "Journalism & Mass Communication",
+  "Social Work"
+],
+      BSc: [
+  "Physics",
+  "Chemistry",
+  "Mathematics",
+  "Statistics",
+  "Botany",
+  "Zoology",
+  "Geology",
+  "AI"
+],
+      BCom: ["Commerce"],
+      BJMC:["Mass_Communication"],
+      BLib:["blib"],
+      BBALLB:["baallb"],
+    },
+    PG: {
+     MA: [
+  "History",
+  "Geography",
+  "Political Science",
+  "Economics",
+  "Sociology",
+  "Psychology",
+  "Philosophy",
+  "English",
+  "Hindi",
+  "Urdu",
+  "Sanskrit",
+  "Maithili",
+  "Journalism & Mass Communication",
+  "Social Work"
+],
+      MSc: [
+  "Physics",
+  "Chemistry",
+  "Mathematics",
+  "Statistics",
+  "Botany",
+  "Zoology",
+  "Geology",
+  "Environmental Science",
+  "Computer Science"
+],
+   
+SocialWork:["social_work"],
+GandhianPeaceStudies:["peace_studies"],
+MAJMC:["majmc"],
+MLib:["mlib"],
+MCom:["commerce"],
+},
+   
+  },
+
+ "Patliputra University": {
+  
+       UG: {
+     BA: [
+  "History",
+  "Geography",
+  "Political Science",
+  "Economics",
+  "Sociology",
+  "Psychology",
+  "Philosophy",
+  "English",
+  "Hindi",
+  "Urdu",
+  "Sanskrit",
+  "Maithili",
+  "Education",
+  "Home Science",
+  "Journalism & Mass Communication",
+  "Social Work"
+],
+      BSc: [
+  "Physics",
+  "Chemistry",
+  "Mathematics",
+  "Statistics",
+  "Botany",
+  "Zoology",
+  "Geology",
+  "AI"
+],
+      BCom: ["Commerce"],
+      BJMC:["Mass_Communication"],
+      BLib:["blib"],
+      BBALLB:["baallb"],
+    },
+    PG: {
+     MA: [
+  "History",
+  "Geography",
+  "Political Science",
+  "Economics",
+  "Sociology",
+  "Psychology",
+  "Philosophy",
+  "English",
+  "Hindi",
+  "Urdu",
+  "Sanskrit",
+  "Maithili",
+  "Journalism & Mass Communication",
+  "Social Work"
+],
+      MSc: [
+  "Physics",
+  "Chemistry",
+  "Mathematics",
+  "Statistics",
+  "Botany",
+  "Zoology",
+  "Geology",
+  "Environmental Science",
+  "Computer Science"
+],
+   
+SocialWork:["social_work"],
+GandhianPeaceStudies:["peace_studies"],
+MAJMC:["majmc"],
+MLib:["mlib"],
+MCom:["commerce"],
+},
+ 
+
+  },
+
+"Aryabhatta Knowledge University": {
+  
+      UG: {
+     BA: [
+  "History",
+  "Geography",
+  "Political Science",
+  "Economics",
+  "Sociology",
+  "Psychology",
+  "Philosophy",
+  "English",
+  "Hindi",
+  "Urdu",
+  "Sanskrit",
+  "Maithili",
+  "Education",
+  "Home Science",
+  "Journalism & Mass Communication",
+  "Social Work"
+],
+      BSc: [
+  "Physics",
+  "Chemistry",
+  "Mathematics",
+  "Statistics",
+  "Botany",
+  "Zoology",
+  "Geology",
+  "AI"
+],
+      BCom: ["Commerce"],
+      BJMC:["Mass_Communication"],
+      BLib:["blib"],
+      BBALLB:["baallb"],
+    },
+    PG: {
+     MA: [
+  "History",
+  "Geography",
+  "Political Science",
+  "Economics",
+  "Sociology",
+  "Psychology",
+  "Philosophy",
+  "English",
+  "Hindi",
+  "Urdu",
+  "Sanskrit",
+  "Maithili",
+  "Journalism & Mass Communication",
+  "Social Work"
+],
+      MSc: [
+  "Physics",
+  "Chemistry",
+  "Mathematics",
+  "Statistics",
+  "Botany",
+  "Zoology",
+  "Geology",
+  "Environmental Science",
+  "Computer Science"
+],
+   
+SocialWork:["social_work"],
+GandhianPeaceStudies:["peace_studies"],
+MAJMC:["majmc"],
+MLib:["mlib"],
+MCom:["commerce"],
+},
+    PRO:[
+      "BBA",
+  "BCA",
+  "MBA",
+  "MCA",
+  "LLB",
+  "BA LLB",
+  "B.Ed"
+  ],
+
+  },
+
+  "Nalanda Open University": {
+  
+       UG: {
+     BA: [
+  "History",
+  "Geography",
+  "Political Science",
+  "Economics",
+  "Sociology",
+  "Psychology",
+  "Philosophy",
+  "English",
+  "Hindi",
+  "Urdu",
+  "Sanskrit",
+  "Maithili",
+  "Education",
+  "Home Science",
+  "Journalism & Mass Communication",
+  "Social Work"
+],
+      BSc: [
+  "Physics",
+  "Chemistry",
+  "Mathematics",
+  "Statistics",
+  "Botany",
+  "Zoology",
+  "Geology",
+  "AI"
+],
+      BCom: ["Commerce"],
+      BJMC:["Mass_Communication"],
+      BLib:["blib"],
+      BBALLB:["baallb"],
+    },
+    PG: {
+     MA: [
+  "History",
+  "Geography",
+  "Political Science",
+  "Economics",
+  "Sociology",
+  "Psychology",
+  "Philosophy",
+  "English",
+  "Hindi",
+  "Urdu",
+  "Sanskrit",
+  "Maithili",
+  "Journalism & Mass Communication",
+  "Social Work"
+],
+      MSc: [
+  "Physics",
+  "Chemistry",
+  "Mathematics",
+  "Statistics",
+  "Botany",
+  "Zoology",
+  "Geology",
+  "Environmental Science",
+  "Computer Science"
+],
+   
+SocialWork:["social_work"],
+GandhianPeaceStudies:["peace_studies"],
+MAJMC:["majmc"],
+MLib:["mlib"],
+MCom:["commerce"],
+},
+  
+
+
+  },
+
+   "Kameshwar Singh Darbhanga Sanskrit University": {
+  
+       UG: {
+     BA: [
+  "History",
+  "Geography",
+  "Political Science",
+  "Economics",
+  "Sociology",
+  "Psychology",
+  "Philosophy",
+  "English",
+  "Hindi",
+  "Urdu",
+  "Sanskrit",
+  "Maithili",
+  "Education",
+  "Home Science",
+  "Journalism & Mass Communication",
+  "Social Work"
+],
+      BSc: [
+  "Physics",
+  "Chemistry",
+  "Mathematics",
+  "Statistics",
+  "Botany",
+  "Zoology",
+  "Geology",
+  "AI"
+],
+      BCom: ["Commerce"],
+      BJMC:["Mass_Communication"],
+      BLib:["blib"],
+      BBALLB:["baallb"],
+    },
+    PG: {
+     MA: [
+  "History",
+  "Geography",
+  "Political Science",
+  "Economics",
+  "Sociology",
+  "Psychology",
+  "Philosophy",
+  "English",
+  "Hindi",
+  "Urdu",
+  "Sanskrit",
+  "Maithili",
+  "Journalism & Mass Communication",
+  "Social Work"
+],
+      MSc: [
+  "Physics",
+  "Chemistry",
+  "Mathematics",
+  "Statistics",
+  "Botany",
+  "Zoology",
+  "Geology",
+  "Environmental Science",
+  "Computer Science"
+],
+   
+SocialWork:["social_work"],
+GandhianPeaceStudies:["peace_studies"],
+MAJMC:["majmc"],
+MLib:["mlib"],
+MCom:["commerce"],
+},
+   
+
+
+  },
+
+
+    "Maulana Mazharul Haque Arabic & Persian University": {
+  
+    PG: {
+     MA: [
+  "History",
+  "Geography",
+  "Political Science",
+  "Economics",
+  "Sociology",
+  "Psychology",
+  "Philosophy",
+  "English",
+  "Hindi",
+  "Urdu",
+  "Sanskrit",
+  "Maithili",
+  "Journalism & Mass Communication",
+  "Social Work"
+],
+      MSc: [
+  "Physics",
+  "Chemistry",
+  "Mathematics",
+  "Statistics",
+  "Botany",
+  "Zoology",
+  "Geology",
+  "Environmental Science",
+  "Computer Science"
+],
+   
+SocialWork:["social_work"],
+GandhianPeaceStudies:["peace_studies"],
+MAJMC:["majmc"],
+MLib:["mlib"],
+MCom:["commerce"],
+},
+  
+
+
+
+  },
+
+"Chanakya National Law University": {
+  
+   
+    PG: {
+     MA: [
+  "History",
+  "Geography",
+  "Political Science",
+  "Economics",
+  "Sociology",
+  "Psychology",
+  "Philosophy",
+  "English",
+  "Hindi",
+  "Urdu",
+  "Sanskrit",
+  "Maithili",
+  "Journalism & Mass Communication",
+  "Social Work"
+],
+      MSc: [
+  "Physics",
+  "Chemistry",
+  "Mathematics",
+  "Statistics",
+  "Botany",
+  "Zoology",
+  "Geology",
+  "Environmental Science",
+  "Computer Science"
+],
+   
+SocialWork:["social_work"],
+GandhianPeaceStudies:["peace_studies"],
+MAJMC:["majmc"],
+MLib:["mlib"],
+MCom:["commerce"],
+},
+    PRO:[
+      "BBA",
+  "BCA",
+  "MBA",
+  "MCA",
+  "LLB",
+  "BA LLB",
+  "B.Ed"
+  ],
+
+  },
+
+   "Bihar Agricultural University": {
+  
+      UG: {
+     BA: [
+  "History",
+  "Geography",
+  "Political Science",
+  "Economics",
+  "Sociology",
+  "Psychology",
+  "Philosophy",
+  "English",
+  "Hindi",
+  "Urdu",
+  "Sanskrit",
+  "Maithili",
+  "Education",
+  "Home Science",
+  "Journalism & Mass Communication",
+  "Social Work"
+],
+      BSc: [
+  "Physics",
+  "Chemistry",
+  "Mathematics",
+  "Statistics",
+  "Botany",
+  "Zoology",
+  "Geology",
+  "AI"
+],
+      BCom: ["Commerce"],
+      BJMC:["Mass_Communication"],
+      BLib:["blib"],
+      BBALLB:["baallb"],
+    },
+    PG: {
+     MA: [
+  "History",
+  "Geography",
+  "Political Science",
+  "Economics",
+  "Sociology",
+  "Psychology",
+  "Philosophy",
+  "English",
+  "Hindi",
+  "Urdu",
+  "Sanskrit",
+  "Maithili",
+  "Journalism & Mass Communication",
+  "Social Work"
+],
+      MSc: [
+  "Physics",
+  "Chemistry",
+  "Mathematics",
+  "Statistics",
+  "Botany",
+  "Zoology",
+  "Geology",
+  "Environmental Science",
+  "Computer Science"
+],
+   
+SocialWork:["social_work"],
+GandhianPeaceStudies:["peace_studies"],
+MAJMC:["majmc"],
+MLib:["mlib"],
+MCom:["commerce"],
+},
+  
+
+  },
+
+  "Bihar Animal Sciences University": {
+  
+     UG: {
+     BA: [
+  "History",
+  "Geography",
+  "Political Science",
+  "Economics",
+  "Sociology",
+  "Psychology",
+  "Philosophy",
+  "English",
+  "Hindi",
+  "Urdu",
+  "Sanskrit",
+  "Maithili",
+  "Education",
+  "Home Science",
+  "Journalism & Mass Communication",
+  "Social Work"
+],
+      BSc: [
+  "Physics",
+  "Chemistry",
+  "Mathematics",
+  "Statistics",
+  "Botany",
+  "Zoology",
+  "Geology",
+  "AI"
+],
+      BCom: ["Commerce"],
+      BJMC:["Mass_Communication"],
+      BLib:["blib"],
+      BBALLB:["baallb"],
+    },
+    PG: {
+     MA: [
+  "History",
+  "Geography",
+  "Political Science",
+  "Economics",
+  "Sociology",
+  "Psychology",
+  "Philosophy",
+  "English",
+  "Hindi",
+  "Urdu",
+  "Sanskrit",
+  "Maithili",
+  "Journalism & Mass Communication",
+  "Social Work"
+],
+      MSc: [
+  "Physics",
+  "Chemistry",
+  "Mathematics",
+  "Statistics",
+  "Botany",
+  "Zoology",
+  "Geology",
+  "Environmental Science",
+  "Computer Science"
+],
+   
+SocialWork:["social_work"],
+GandhianPeaceStudies:["peace_studies"],
+MAJMC:["majmc"],
+MLib:["mlib"],
+MCom:["commerce"],
+},
+  
+
+  },
+
+  
+  "Bihar Engineering University": {
+  
+      UG: {
+     BA: [
+  "History",
+  "Geography",
+  "Political Science",
+  "Economics",
+  "Sociology",
+  "Psychology",
+  "Philosophy",
+  "English",
+  "Hindi",
+  "Urdu",
+  "Sanskrit",
+  "Maithili",
+  "Education",
+  "Home Science",
+  "Journalism & Mass Communication",
+  "Social Work"
+],
+      BSc: [
+  "Physics",
+  "Chemistry",
+  "Mathematics",
+  "Statistics",
+  "Botany",
+  "Zoology",
+  "Geology",
+  "AI"
+],
+      BCom: ["Commerce"],
+      BJMC:["Mass_Communication"],
+      BLib:["blib"],
+      BBALLB:["baallb"],
+    },
+    PG: {
+     MA: [
+  "History",
+  "Geography",
+  "Political Science",
+  "Economics",
+  "Sociology",
+  "Psychology",
+  "Philosophy",
+  "English",
+  "Hindi",
+  "Urdu",
+  "Sanskrit",
+  "Maithili",
+  "Journalism & Mass Communication",
+  "Social Work"
+],
+      MSc: [
+  "Physics",
+  "Chemistry",
+  "Mathematics",
+  "Statistics",
+  "Botany",
+  "Zoology",
+  "Geology",
+  "Environmental Science",
+  "Computer Science"
+],
+   
+SocialWork:["social_work"],
+GandhianPeaceStudies:["peace_studies"],
+MAJMC:["majmc"],
+MLib:["mlib"],
+MCom:["commerce"],
+},
+  
+
+  },
+
+  /* =======================
+     CENTRAL UNIVERSITIES
+  ======================= */
+
+  "Central University of South Bihar": {
+
+ UG: {
+     BA: [
+  "Education",
+ 
+],
+      BSc: [
+  "Education",
+],
+    
+    },
+
+
+    PG: {
+      MA: ["History","Sociology","Psychology","English","Economics"],
+      MSc: ["Geology","Biotechnology","Environmental_Science","Physics","Chemistry","Mathematics"," Statistics","Computer_Science","Psychology"]
+    },
+    INT: {
+      "5-Year Integrated UG-PG in History": ["History"],
+      "5-Year Integrated UG-PG in Geography": ["Geography"],
+      "5-Year Integrated UG-PG in Economics": ["Economics"],
+      "5-Year Integrated UG-PG in Sociology": ["Sociology"],
+      "5-Year Integrated UG-PG in Psychology": ["Psychology"],
+      "5-Year Integrated UG-PG in Chemistry":["Chemistry"],
+      "5-Year Integrated UG-PG in Mathematics":["Mathematics"],
+      "5-Year Integrated UG-PG in Statistics":["Statistics"],
+      "5-Year Integrated UG-PG in English":["English"],
+      "5-Year Integrated UG-PG in Life Science":[" Life Science"],
+      "5-Year Integrated UG-PG in Geology":["Geology"],
+
+    }
+  },
+
+  "Mahatma Gandhi Central University": {
+   UG: {
+     BA: [
+ "English", ,
+],
+  BSc: [
+ "Physics", "Chemistry",
+],
+BCom:[
+  "commerce",
+],
+BJMC:[
+  "bjmc_sem_1", "bjmc_sem_3rd", "bjmc_sem_5"
+],
+BLib:[
+  "blib_it",
+],
+BBALLB:[
+  "bballb",
+],
+
+
+     
+},
+
+    PG: {
+      MA: ["English","Sociology","Economics","Sanskrit","Education"],
+      MSc: ["Biotechnology","Physics","Zoology","Mathematics"],
+        MCom: ["commerce"],
+         SocialWork: [
+      "Social_work_sem_first", "Social_work_sem_third",
+     ],
+       GandhianPeaceStudies:[
+       "Gandhian_Peace_Studies",
+       ],
+       MAJMC:[
+  "majmc_sem_1", "majmc_sem_3rd",
+],
+MLib:[
+  "mlib_it",
+] 
+
+    }
+  },
+  PRO:[
+    "BBA",
+    "BCA",
+      "MBA",
+      "MCA"
+     
+],
+    
+
+  "Nalanda University": {
+    PG: {
+      MA: ["Hindu_Studies","World_Literature","Historical_Studies","Buddhist_Studies","Peace_Studies","Archaeology"," Economics", "Hindi"],
+      MSc: ["Mathematics"]
+    }
+  },
+
+  /* =======================
+     PRIVATE UNIVERSITIES
+  ======================= */
+
+  "Amity University Patna": {
+    UG: {
+      BA: ["History","Geography","Political_Science","economics", "Sociology"," Psychology"," Philosophy","English","Journalism & Mass Communication","Social_Work"],
+      BSc: ["Physics","Chemistry","Mathematics","Statistics","Botany","Zoology","Geology","Environmental_Science"," Computer_Science","Information_Technology", " Life_Science"],
+      BCom: ["Commerce"]
+    },
+    PG: {
+      MA: ["History","Geography","Political_Science","economics", "Sociology"," Psychology"," Philosophy","English","Journalism & Mass Communication","Social_Work"],
+      MSc: ["Physics","Chemistry","Mathematics","Statistics","Geology","Environmental_Science", "Information_Technology",],
+      MCom: ["Commerce"]
+    },
+    PRO: {
+      BBA: ["Management"],
+      BCA: ["Computer Applications"],
+      MBA: ["Management"],
+      MCA: ["Computer Applications"],
+      LLB:["Law"],
+    },
+    INT:{
+      
+      "5-Year Integrated UG-PG in History": ["History"],
+      "5-Year Integrated UG-PG in Geography": ["Geography"],
+      "5-Year Integrated UG-PG in Economics": ["Economics"],
+      "5-Year Integrated UG-PG in Sociology": ["Sociology"],
+      "5-Year Integrated UG-PG in Psychology": ["Psychology"],
+      "5-Year Integrated UG-PG in Chemistry":["Chemistry"],
+      "5-Year Integrated UG-PG in Mathematics":["Mathematics"],
+      "5-Year Integrated UG-PG in Statistics":["Statistics"],
+      "5-Year Integrated UG-PG in English":["English"],
+      "5-Year Integrated UG-PG in Life Science":[" Life Science"],
+      "5-Year Integrated UG-PG in Geology":["Geology"],
+
+    }
+  },
+
+  "Gopal Narayan Singh University": {
+    PRO: {
+      
+      BCA: ["Computer Applications"],
+      MBA: ["Management"],
+      BBA: ["Management"],
+      MCA: ["Computer Applications"]
+    }
+  }
+
+};
+
+
+
+
+
+/* ---------- University List (Loaded Dynamically) ---------- */
+let stateVsUniData = {};
+
+/* ---------- University → Courses ---------- */
+const universityCourses = {
+  "Mahatma Gandhi Central University":["UG","PG","PRO"],
+  "Central University of South Bihar":["UG","PG","INT"],
+  "Nalanda University":["PG"],
+  // "Dr. Rajendra Prasad Central Agricultural University":["UG","PG"],
+
+  "Patna University":["UG","PG", "PRO"],
+  "Magadh University":["UG","PG","PRO"],
+  "Babasaheb Bhimrao Ambedkar Bihar University (BRABU)":["UG","PG" ,"PRO"],
+  "Tilka Manjhi Bhagalpur University":["UG","PG"],
+  "Lalit Narayan Mithila University":["UG","PG","PRO",],//"INT"
+  "Veer Kunwar Singh University":["UG","PG","PRO"],//"DOC"
+  "Jai Prakash University":["UG","PG"],
+  "Purnea University":["UG","PG"],
+  "Patliputra University":["UG","PG",], //"DOC"
+  "Aryabhatta Knowledge University":["UG","PG","PRO"],//"DOC"
+  "Nalanda Open University":["UG","PG"],
+  "Kameshwar Singh Darbhanga Sanskrit University":["UG","PG",],//"INT"
+  "Maulana Mazharul Haque Arabic & Persian University":["PG",],  //"DOC"
+  "Chanakya National Law University":["PG","PRO",],//"INT"
+  "Bihar Agricultural University":["UG","PG",],//"DOC"
+  "Bihar Animal Sciences University":["UG","PG",],//"DOC"
+  "Bihar Engineering University":["UG","PG",] ,//"DOC"
+
+  "Amity University Patna":["UG","PG","PRO","INT"],
+   "Gopal Narayan Singh University":["PRO"],//"DOC"
+  // "Sandip University, Sijoul":["UG","PG",],
+  //  "Dr. C. V. Raman University, Bihar":["UG","PG","PRO"]
+};
+
+/* ---------- Programs ----------- */
+const programs = {
+ UG:[
+  "BA",
+"BSc",
+"BCom",
+"BJMC",
+"BLib",
+"BBALLB"
+
+],
+PG:[
+  "MA",
+  "MSc",
+  "SocialWork",
+  "GandhianPeaceStudies",
+  "MAJMC",
+  "MLib",
+  "MCom"
+],
+
+PRO:[
+ "BBA",
+"BCA",
+"MBA",
+"MCA",
+
+
+],
+
+  INT:[
+     
+ {text:"5-Year Integrated UG-PG in Geography", value:"geography"},
+ {text:"5-Year Integrated UG-PG in History", value:"history"},
+ {text:"5-Year Integrated UG-PG in Commerce", value:"commerce"},
+ {text:"5-Year Integrated UG-PG in Economics", value:"economics"},
+ {text:"5-Year Integrated UG-PG in Political Studies & International Relations", value:"political_studies_international_relations"},
+ {text:"5-Year Integrated UG-PG in Sociology", value:"sociology"},
+ {text:"5-Year Integrated UG-PG in Psychology", value:"psychology"},
+ {text:"5-Year Integrated UG-PG in Chemistry", value:"chemistry"},
+ {text:"5-Year Integrated UG-PG in Mathematics", value:"mathematics"},
+ {text:"5-Year Integrated UG-PG in Statistics", value:"statistics"},
+ {text:"5-Year Integrated UG-PG in English", value:"english"},
+ {text:"5-Year Integrated UG-PG in Hindi", value:"hindi"},
+ {text:"5-Year Integrated UG-PG in Computer Science", value:"computer_science"},
+ {text:"5-Year Integrated UG-PG in Life Science", value:"life_science"},
+ {text:"5-Year Integrated UG-PG in Geology", value:"geology"}
+],
+DOC:[
+  "PhD"
+]
+
+
+};
+
+// Helper for normalizing university names
+function getUniversityKey(uniName) {
+  if (!uniName) return "";
+  return uniName.toLowerCase().replace(/,/g, "").replace(/’/g, "'").replace(/\s+/g, " ").trim();
+}
+
+// Normalized maps built once data is loaded
+let normalizedUniversityCourses = {};
+let normalizedUniversityProgramSubject = {};
+
+window.addEventListener("DOMContentLoaded", async () => {
+  try {
+    const res = await fetch("/stateVsUniTypeVsUni.json");
+    stateVsUniData = await res.json();
+    
+    // Build normalized lookup maps
+    Object.keys(universityCourses).forEach(key => {
+      normalizedUniversityCourses[getUniversityKey(key)] = universityCourses[key];
+    });
+    
+    Object.keys(universityProgramSubject).forEach(key => {
+      normalizedUniversityProgramSubject[getUniversityKey(key)] = universityProgramSubject[key];
+    });
+
+    // Populate State dropdown dynamically from JSON keys
+    const stateSelect = document.getElementById("state");
+    stateSelect.innerHTML = "<option value=''>Select State</option>";
+    
+    Object.keys(stateVsUniData).sort().forEach(s => {
+      // Normalize state name for display (e.g. BIHAR -> Bihar)
+      const displayName = s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+      stateSelect.add(new Option(displayName, s));
+    });
+  } catch (err) {
+    console.error("Failed to load stateVsUniTypeVsUni.json", err);
+  }
+});
+
+function stateChange() {
+  const stateSelect = document.getElementById("state");
+  const typeSelect = document.getElementById("universityType");
+  const uniSelect = document.getElementById("university");
+  
+  typeSelect.innerHTML = "<option value=''>University Type</option>";
+  uniSelect.innerHTML = "<option value=''>Select University</option>";
+  document.getElementById("course").innerHTML = "<option value=''>Course</option>";
+  document.getElementById("program").innerHTML = "<option value=''>Program</option>";
+  
+  const selectedState = stateSelect.value;
+  if (!selectedState || !stateVsUniData[selectedState]) return;
+  
+  // Populate University Type dropdown from state keys
+  const types = Object.keys(stateVsUniData[selectedState]).sort();
+  types.forEach(t => {
+    typeSelect.add(new Option(t, t));
+  });
+  // Add "All" option
+  typeSelect.add(new Option("All", "all"));
+}
+
+function typeChange() {
+  const stateSelect = document.getElementById("state");
+  const typeSelect = document.getElementById("universityType");
+  const uniSelect = document.getElementById("university");
+  
+  uniSelect.innerHTML = "<option value=''>Select University</option>";
+  document.getElementById("course").innerHTML = "<option value=''>Course</option>";
+  document.getElementById("program").innerHTML = "<option value=''>Program</option>";
+  
+  const selectedState = stateSelect.value;
+  const selectedType = typeSelect.value;
+  if (!selectedState || !selectedType || !stateVsUniData[selectedState]) return;
+  
+  if (selectedType === "all") {
+    // Collect and de-duplicate universities across all types
+    Object.keys(stateVsUniData[selectedState]).forEach(typeKey => {
+      const unisObj = stateVsUniData[selectedState][typeKey] || {};
+      Object.keys(unisObj).forEach(u => {
+        if (!Array.from(uniSelect.options).some(opt => opt.value === u)) {
+          uniSelect.add(new Option(u, u));
+        }
+      });
+    });
+  } else {
+    const unisObj = stateVsUniData[selectedState][selectedType] || {};
+    Object.keys(unisObj).forEach(u => {
+      uniSelect.add(new Option(u, u));
+    });
+  }
+}
+
+function getSelectedUniversityData() {
+  const state = document.getElementById("state").value;
+  const type = document.getElementById("universityType").value;
+  const uni = document.getElementById("university").value;
+  
+  if (!state || !uni) return null;
+  
+  if (type === "all") {
+    for (const t of Object.keys(stateVsUniData[state])) {
+      if (stateVsUniData[state][t][uni]) {
+        return stateVsUniData[state][t][uni];
+      }
+    }
+  } else {
+    return stateVsUniData[state][type]?.[uni];
+  }
+  return null;
+}
+
+function universityChange() {
+  const course = document.getElementById("course");
+  const program = document.getElementById("program");
+  const subject = document.getElementById("subject");
+
+  course.innerHTML = "<option value=''>Course</option>";
+  program.innerHTML = "<option value=''>Program</option>";
+  subject.innerHTML = "<option value=''>Subject</option>";
+  subject.style.display = "none";
+
+  const uniData = getSelectedUniversityData();
+  window.currentUniData = uniData; // Store it for courseChange to use
+  
+  if (uniData && Object.keys(uniData).length > 0) {
+    Object.keys(uniData).forEach(level => {
+      course.add(new Option(level, level));
+    });
+  } else {
+    // Fallback if no syllabus data exists for this university
+    const uni = document.getElementById("university").value;
+    const uniKey = getUniversityKey(uni);
+    const coursesList = normalizedUniversityCourses[uniKey] || ["UG", "PG", "PRO", "INT"];
+    
+    coursesList.forEach(c => {
+      course.add(new Option(
+        c === "UG" ? "UG" :
+        c === "PG" ? "PG" :
+        c === "PRO" ? "PROFESSIONAL" :
+        c === "INT" ? "INTEGRATED" :
+        c === "DOC" ? "Doctoral (PhD)" : c,
+        c
+      ));
+    });
+  }
+}
+
+function courseChange() {
+  const c = document.getElementById("course").value;
+  const program = document.getElementById("program");
+  const subject = document.getElementById("subject");
+
+  program.innerHTML = "<option value=''>Program</option>";
+  subject.innerHTML = "<option value=''>Subject</option>";
+  subject.style.display = "none";
+
+  if (window.currentUniData && window.currentUniData[c]) {
+    // Data comes from stateVsUniTypeVsUni.json
+    const programsList = window.currentUniData[c];
+    
+    // We can extract unique program names
+    const uniquePrograms = [...new Set(programsList.map(p => p.programName))];
+    uniquePrograms.forEach(p => {
+      program.add(new Option(p, p));
+    });
+  } else {
+    // Fallback logic for old hardcoded data
+    if (c === "INT") {
+      subject.style.display = "none";
+    } else {
+      subject.style.display = (c === "UG" || c === "PG") ? "block" : "none";
+    }
+
+    programs[c]?.forEach(p => {
+      if (typeof p === "object") {
+        program.add(new Option(p.text, p.value));
+      } else {
+        program.add(new Option(p, p));
+      }
+    });
+  }
+}
+
+document.getElementById("program").addEventListener("change", function () {
+  const c = document.getElementById("course").value;
+  const progName = this.value;
+  const subject = document.getElementById("subject");
+
+  subject.innerHTML = "<option value=''>Subject</option>";
+
+  if (window.currentUniData && window.currentUniData[c]) {
+    // Handle subject for the newly added JSON data
+    const programsList = window.currentUniData[c];
+    const matchedPrograms = programsList.filter(p => p.programName === progName);
+    
+    const uniqueSubjects = [...new Set(matchedPrograms.map(p => p.subject).filter(s => s && s !== '—'))];
+    
+    if (uniqueSubjects.length > 0) {
+      subject.style.display = "block";
+      uniqueSubjects.forEach(s => {
+        subject.add(new Option(s, s));
+      });
+    } else {
+      subject.style.display = "none";
+    }
+  } else {
+    // Old fallback logic
+    const uni = document.getElementById("university").value;
+    const uniKey = getUniversityKey(uni);
+    const subjectsMap = normalizedUniversityProgramSubject[uniKey];
+
+    if (!subjectsMap || !subjectsMap[c] || !subjectsMap[c][progName]) {
+      subject.style.display = "none";
+      return;
+    }
+
+    subject.style.display = "block";
+    subjectsMap[c][progName].forEach(s => {
+      subject.add(new Option(s, s));
+    });
+  }
+});
+
+</script>
+
+</body>
+</html>
