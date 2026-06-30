@@ -2,10 +2,19 @@
 const express = require("express");
 const nodemailer = require("nodemailer");
 const cors = require("cors");
+const path = require("path");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+// Serve static files from the project root
+app.use(express.static(__dirname));
+
+// Serve index.html on the root route
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "index.html"));
+});
 
 /* ===== EMAIL CONFIG ===== */
 const transporter = nodemailer.createTransport({
@@ -10311,7 +10320,11 @@ app.post("/submit", (req, res) => {
     ut = ["state", "private", "central"];
   }
 
-  const un = university?.toLowerCase().trim();
+  const un = university?.toLowerCase()
+    .replace(/,/g, "")
+    .replace(/’/g, "'")
+    .replace(/\s+/g, " ")
+    .trim();
 
   const c = course?.toLowerCase().includes("professional")
     ? "pro"
@@ -10333,9 +10346,13 @@ app.post("/submit", (req, res) => {
     ? "central"
     : universityType?.toLowerCase().includes("private")
       ? "private"
-      : universityType?.toLowerCase().includes("government")
-        ? "government"
-        : universityType?.toLowerCase().trim();
+      : universityType?.toLowerCase().includes("state")
+        ? "state"
+        : universityType?.toLowerCase().includes("deemed")
+          ? "deemed"
+          : universityType?.toLowerCase().includes("government")
+            ? "government"
+            : universityType?.toLowerCase().trim();
   let linkData = null;
   if (c === "pro") {
     linkData = SYLLABUS_LINKS?.[st]?.[uniType]?.[un]?.pro?.[p] || null;

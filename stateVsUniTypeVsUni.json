@@ -1,0 +1,211 @@
+{
+    "BIHAR": {
+        "Central Universities": [
+            "Central University of South Bihar",
+            "Mahatma Gandhi Central University",
+            "Nalanda University",
+            "Dr. Rajendra Prasad Central Agricultural University"
+        ],
+        "Deemed-to-be Universities": [
+            "Bihar Yoga Bharati"
+        ],
+        "Private Universities": [
+            "Amity University, Patna",
+            "Gopal Narayan Singh University",
+            "Dr. C. V. Raman University, Bihar"
+        ],
+        "State Universities": [
+            "Patna University",
+            "Patna Women\u2019s University (PUW)",
+            "Magadh University",
+            "Babasaheb Bhimrao Ambedkar Bihar University (BRABU)",
+            "Tilka Manjhi Bhagalpur University",
+            "Lalit Narayan Mithila University",
+            "Veer Kunwar Singh University",
+            "Jai Prakash University",
+            "Purnea University",
+            "Patliputra University",
+            "Aryabhatta Knowledge University",
+            "Nalanda Open University",
+            "Kameshwar Singh Darbhanga Sanskrit University",
+            "Maulana Mazharul Haque Arabic & Persian University",
+            "Chanakya National Law University",
+            "Bihar Agricultural University",
+            "Bihar Animal Sciences University",
+            "Bihar Engineering University"
+        ]
+    },
+    "Jharkhand": {
+        "Central University": [
+            "Central University of Jharkhand"
+        ],
+        "Deemed-to-be Universities": [
+            "Birla Institute of Technology, Mesra"
+        ],
+        "Private Universities": [
+            "Amity University, Jharkhand",
+            "AISECT University",
+            "Arka Jain University",
+            "Capital University",
+            "Netaji Subhas University",
+            "Pragyan International University",
+            "Radha Govind University",
+            "Ramchandra Chandravansi University",
+            "Sai Nath University",
+            "Sarala Birla University",
+            "Usha Martin University",
+            "YBN University",
+            "Jharkhand Rai University"
+        ],
+        "State Universities": [
+            "Ranchi University",
+            "Kolhan University",
+            "Vinoba Bhave University",
+            "Nilamber-Pitamber University",
+            "Sido Kanhu Murmu University",
+            "Binod Bihari Mahto Koyalanchal University",
+            "Dr. Shyama Prasad Mukherjee University",
+            "Birsa Agricultural University",
+            "Jharkhand University of Technology",
+            "Jharkhand Raksha Shakti University",
+            "Pandit Deendayal Upadhyay Memorial Health Sciences University"
+        ]
+    },
+    "Madhya Pradesh": {
+        "Central Universities": [
+            "Dr. Hari Singh Gour Vishwavidyalaya",
+            "Indira Gandhi National Tribal University"
+        ],
+        "Deemed-to-be Universities": [
+            "Indian Institute of Forest Management",
+            "Indian Institute of Information Technology, Design & Manufacturing, Jabalpur"
+        ],
+        "Private Universities": [
+            "Amity University, Gwalior",
+            "Amity University, Bhopal",
+            "AKS University",
+            "Career Point University",
+            "ITM University",
+            "LNCT University",
+            "Maharishi Mahesh Yogi Vedic Vishwavidyalaya",
+            "Oriental University",
+            "Rabindranath Tagore University",
+            "Sage University",
+            "Sri Sathya Sai University of Human Excellence",
+            "Technocrats University",
+            "VIT Bhopal University",
+            "Jagran Lakecity University",
+            "Mahakal University",
+            "People\u2019s University",
+            "Renaissance University",
+            "Scope Global Skills University",
+            "Sri Aurobindo University",
+            "Madhyanchal Professional University"
+        ],
+        "State Universities": [
+            "Barkatullah University",
+            "Devi Ahilya Vishwavidyalaya",
+            "Jiwaji University",
+            "Vikram University",
+            "Rani Durgavati Vishwavidyalaya",
+            "Awadhesh Pratap Singh University",
+            "Maharaja Chhatrasal Bundelkhand University",
+            "Raja Bhoj Open University",
+            "Madhya Pradesh Medical Science University",
+            "Nanaji Deshmukh Veterinary Science University",
+            "Jawaharlal Nehru Krishi Vishwavidyalaya",
+            "Rajmata Vijayaraje Scindia Krishi Vishwavidyalaya",
+            "Mahatma Gandhi Chitrakoot Gramodaya Vishwavidyalaya",
+            "Kushabhau Thakre Patrakarita Avam Jansanchar Vishwavidyalaya",
+            "Makhanlal Chaturvedi National University of Journalism"
+        ]
+    },
+    "Uttarakhand": {
+        "Central Universities": [
+            "Hemwati Nandan Bahuguna Garhwal University"
+        ],
+        "Deemed-to-be Universities": [
+            "Forest Research Institute",
+            "Gurukul Kangri Vishwavidyalaya",
+            "Graphic Era",
+            "Swami Rama Himalayan University"
+        ],
+        "Private Universities": [
+            "DIT University",
+            "Graphic Era Hill University",
+            "IMS Unison University",
+            "Quantum University",
+            "Sanskriti University",
+            "Shri Guru Ram Rai University",
+            "Swami Rama Himalayan University",
+            "University of Petroleum and Energy Studies",
+            "Uttaranchal University"
+        ],
+        "State Universities": [
+            "Kumaun University",
+            "Doon University",
+            "Uttarakhand Open University",
+            "Uttarakhand Technical University",
+            "Uttarakhand Ayurved University",
+            "Uttarakhand Sanskrit University",
+            "G.B. Pant University of Agriculture and Technology",
+            "Soban Singh Jeena University",
+            "Himalayan Garhwal University"
+        ]
+    },
+    "Uttar Pradesh": {
+        "Central Universities": [
+            "Aligarh Muslim University",
+            "Banaras Hindu University",
+            "Babasaheb Bhimrao Ambedkar University",
+            "University of Allahabad",
+            "Rajiv Gandhi National Aviation University",
+            "Rani Lakshmi Bai Central Agricultural University"
+        ],
+        "Deemed-to-be Universities": [
+            "Bhatkhande Music Institute",
+            "Central Institute of Higher Tibetan Studies",
+            "Dayalbagh Educational Institute",
+            "Indian Veterinary Research Institute",
+            "Jaypee Institute of Information Technology",
+            "Nehru Gram Bharati",
+            "Shobhit Institute of Engineering & Technology",
+            "Santosh University"
+        ],
+        "Private Universities": [
+            "Amity University, Noida",
+            "Amity University, Lucknow",
+            "Bennett University",
+            "Babu Banarasi Das University",
+            "Galgotias University",
+            "GLA University",
+            "IFTM University",
+            "Invertis University",
+            "Mangalayatan University",
+            "Monad University",
+            "Noida International University",
+            "Sharda University",
+            "Shiv Nadar University",
+            "Swami Vivekanand Subharti University",
+            "Teerthanker Mahaveer University",
+            "Sanskriti University"
+        ],
+        "State Universities": [
+            "University of Lucknow",
+            "Dr. A.P.J. Abdul Kalam Technical University",
+            "Dr. B.R. Ambedkar University",
+            "Chhatrapati Shahu Ji Maharaj University",
+            "Deen Dayal Upadhyay Gorakhpur University",
+            "Mahatma Gandhi Kashi Vidyapith",
+            "Bundelkhand University",
+            "Chaudhary Charan Singh University",
+            "M.J.P. Rohilkhand University",
+            "Sampurnanand Sanskrit Vishwavidyalaya",
+            "UP Rajarshi Tandon Open University",
+            "Sardar Vallabhbhai Patel University of Agriculture and Technology",
+            "Uttar Pradesh University of Medical Sciences",
+            "Prof. Rajendra Singh (Rajju Bhaiya) University",
+            "Jananayak Chandrashekhar University"
+        ]
+    }
+}

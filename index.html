@@ -1668,71 +1668,8 @@ MLib:[
 
 
 
-/* ---------- University List ---------- */
-const universityData = {
-  Bihar:{
-    Central:[
-      "Central University of South Bihar",
-      "Mahatma Gandhi Central University",
-      // "Central University of South Bihar",
-      "Nalanda University"
-    ],
-    State:[
-      "Patna University",
-      "Magadh University",
-      "Babasaheb Bhimrao Ambedkar Bihar University (BRABU)",
-      "Tilka Manjhi Bhagalpur University",
-      "Lalit Narayan Mithila University",
-      "Veer Kunwar Singh University",
-      "Jai Prakash University",
-      "Purnea University",
-      "Patliputra University",
-      "Aryabhatta Knowledge University",
-      "Nalanda Open University",
-      "Kameshwar Singh Darbhanga Sanskrit University",
-      "Maulana Mazharul Haque Arabic & Persian University",
-      "Chanakya National Law University",
-      "Bihar Agricultural University",
-      "Bihar Animal Sciences University",
-      "Bihar Engineering University",
-    ],
-    Private:[
-      "Amity University Patna",
-      "Gopal Narayan Singh University",
-      // "Sandip University, Sijoul",
-      // "Dr. C. V. Raman University, Bihar"
-
-    ],
-
-     All:[
-      "Amity University Patna",
-      "Gopal Narayan Singh University",
-      // "Sandip University, Sijoul",
-      // "Dr. C. V. Raman University, Bihar",
-       "Patna University",
-      "Magadh University",
-      "Babasaheb Bhimrao Ambedkar Bihar University (BRABU)",
-      "Tilka Manjhi Bhagalpur University",
-      "Lalit Narayan Mithila University",
-      "Veer Kunwar Singh University",
-      "Jai Prakash University",
-      "Purnea University",
-      "Patliputra University",
-      "Aryabhatta Knowledge University",
-      "Nalanda Open University",
-      "Kameshwar Singh Darbhanga Sanskrit University",
-      "Maulana Mazharul Haque Arabic & Persian University",
-      "Chanakya National Law University",
-      "Bihar Agricultural University",
-      "Bihar Animal Sciences University",
-      "Bihar Engineering University",
-"Central University of South Bihar",
-      "Mahatma Gandhi Central University",
-     
-      "Nalanda University"
-    ]
-  }
-};
+/* ---------- University List (Loaded Dynamically) ---------- */
+let stateVsUniData = {};
 
 /* ---------- University → Courses ---------- */
 const universityCourses = {
@@ -1820,79 +1757,144 @@ DOC:[
 
 };
 
-function stateChange(){
-  document.getElementById("university").innerHTML="<option value=''>Select University</option>";
-  document.getElementById("course").innerHTML="<option value=''>Course</option>";
-  document.getElementById("program").innerHTML="<option value=''>Program</option>";
+// Helper for normalizing university names
+function getUniversityKey(uniName) {
+  if (!uniName) return "";
+  return uniName.toLowerCase().replace(/,/g, "").replace(/’/g, "'").replace(/\s+/g, " ").trim();
 }
 
-function typeChange(){
-  const state=document.getElementById("state").value;
-  const type=document.getElementById("universityType").value;
-  const uni=document.getElementById("university");
+// Normalized maps built once data is loaded
+let normalizedUniversityCourses = {};
+let normalizedUniversityProgramSubject = {};
 
-  uni.innerHTML="<option value=''>Select University</option>";
+window.addEventListener("DOMContentLoaded", async () => {
+  try {
+    const res = await fetch("/stateVsUniTypeVsUni.json");
+    stateVsUniData = await res.json();
+    
+    // Build normalized lookup maps
+    Object.keys(universityCourses).forEach(key => {
+      normalizedUniversityCourses[getUniversityKey(key)] = universityCourses[key];
+    });
+    
+    Object.keys(universityProgramSubject).forEach(key => {
+      normalizedUniversityProgramSubject[getUniversityKey(key)] = universityProgramSubject[key];
+    });
 
-  if(!state||!type) return;
+    // Populate State dropdown dynamically from JSON keys
+    const stateSelect = document.getElementById("state");
+    stateSelect.innerHTML = "<option value=''>Select State</option>";
+    
+    Object.keys(stateVsUniData).sort().forEach(s => {
+      // Normalize state name for display (e.g. BIHAR -> Bihar)
+      const displayName = s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+      stateSelect.add(new Option(displayName, s));
+    });
+  } catch (err) {
+    console.error("Failed to load stateVsUniTypeVsUni.json", err);
+  }
+});
 
-  if(type==="all"){
-    ["central","state","private"].forEach(t=>{
-      universityData[state][t]?.forEach(u=>{
-        uni.add(new Option(u,u));
+function stateChange() {
+  const stateSelect = document.getElementById("state");
+  const typeSelect = document.getElementById("universityType");
+  const uniSelect = document.getElementById("university");
+  
+  typeSelect.innerHTML = "<option value=''>University Type</option>";
+  uniSelect.innerHTML = "<option value=''>Select University</option>";
+  document.getElementById("course").innerHTML = "<option value=''>Course</option>";
+  document.getElementById("program").innerHTML = "<option value=''>Program</option>";
+  
+  const selectedState = stateSelect.value;
+  if (!selectedState || !stateVsUniData[selectedState]) return;
+  
+  // Populate University Type dropdown from state keys
+  const types = Object.keys(stateVsUniData[selectedState]).sort();
+  types.forEach(t => {
+    typeSelect.add(new Option(t, t));
+  });
+  // Add "All" option
+  typeSelect.add(new Option("All", "all"));
+}
+
+function typeChange() {
+  const stateSelect = document.getElementById("state");
+  const typeSelect = document.getElementById("universityType");
+  const uniSelect = document.getElementById("university");
+  
+  uniSelect.innerHTML = "<option value=''>Select University</option>";
+  document.getElementById("course").innerHTML = "<option value=''>Course</option>";
+  document.getElementById("program").innerHTML = "<option value=''>Program</option>";
+  
+  const selectedState = stateSelect.value;
+  const selectedType = typeSelect.value;
+  if (!selectedState || !selectedType || !stateVsUniData[selectedState]) return;
+  
+  if (selectedType === "all") {
+    // Collect and de-duplicate universities across all types
+    Object.keys(stateVsUniData[selectedState]).forEach(typeKey => {
+      const list = stateVsUniData[selectedState][typeKey] || [];
+      list.forEach(u => {
+        if (!Array.from(uniSelect.options).some(opt => opt.value === u)) {
+          uniSelect.add(new Option(u, u));
+        }
       });
     });
-  }else{
-    universityData[state][type]?.forEach(u=>{
-      uni.add(new Option(u,u));
+  } else {
+    const list = stateVsUniData[selectedState][selectedType] || [];
+    list.forEach(u => {
+      uniSelect.add(new Option(u, u));
     });
   }
 }
 
-function universityChange(){
-  const uni=document.getElementById("university").value;
-  const course=document.getElementById("course");
-  const program=document.getElementById("program");
+function universityChange() {
+  const uni = document.getElementById("university").value;
+  const course = document.getElementById("course");
+  const program = document.getElementById("program");
 
-  course.innerHTML="<option value=''>Course</option>";
-  program.innerHTML="<option value=''>Program</option>";
+  course.innerHTML = "<option value=''>Course</option>";
+  program.innerHTML = "<option value=''>Program</option>";
 
-  universityCourses[uni]?.forEach(c=>{
+  const uniKey = getUniversityKey(uni);
+  // Default fallback courses if university is not in universityCourses database
+  const coursesList = normalizedUniversityCourses[uniKey] || ["UG", "PG", "PRO", "INT"];
+  
+  coursesList.forEach(c => {
     course.add(new Option(
-      c==="UG" ? "UG" :
-  c==="PG" ? "PG" :
-  c==="PRO" ? "PROFESSIONAL" :
-  c==="INT" ? "INTEGRATED" :
-  c==="DOC" ? "Doctoral (PhD)" :c,c))
+      c === "UG" ? "UG" :
+      c === "PG" ? "PG" :
+      c === "PRO" ? "PROFESSIONAL" :
+      c === "INT" ? "INTEGRATED" :
+      c === "DOC" ? "Doctoral (PhD)" : c,
+      c
+    ));
   });
 }
 
-function courseChange(){
-  const c=document.getElementById("course").value;
-  const program=document.getElementById("program");
-  const subject=document.getElementById("subject");
+function courseChange() {
+  const c = document.getElementById("course").value;
+  const program = document.getElementById("program");
+  const subject = document.getElementById("subject");
 
-  program.innerHTML="<option value=''>Program</option>";
+  program.innerHTML = "<option value=''>Program</option>";
 
-  // 🔥 Integrated me subject hide
-  if(c==="INT"){
-    subject.style.display="none";
-  }else{
-    subject.style.display=(c==="UG"||c==="PG")?"block":"none";
+  if (c === "INT") {
+    subject.style.display = "none";
+  } else {
+    subject.style.display = (c === "UG" || c === "PG") ? "block" : "none";
   }
 
-  programs[c]?.forEach(p=>{
-    if(typeof p === "object"){
-      program.add(new Option(p.text,p.value));
-    }else{
-      program.add(new Option(p,p));
+  programs[c]?.forEach(p => {
+    if (typeof p === "object") {
+      program.add(new Option(p.text, p.value));
+    } else {
+      program.add(new Option(p, p));
     }
   });
 }
 
-
 document.getElementById("program").addEventListener("change", function () {
-
-  const universityType = document.getElementById("universityType").value;
   const uni = document.getElementById("university").value;
   const course = document.getElementById("course").value;
   const program = this.value;
@@ -1900,24 +1902,18 @@ document.getElementById("program").addEventListener("change", function () {
 
   subject.innerHTML = "<option value=''>Subject</option>";
 
-  // "All" case ko handle karo
-  const type = universityType === "All" ? "Private" : universityType;
+  const uniKey = getUniversityKey(uni);
+  const subjectsMap = normalizedUniversityProgramSubject[uniKey];
 
-  if (
-    !universityProgramSubject[uni] ||
-    !universityProgramSubject[uni][course] ||
-    !universityProgramSubject[uni][course][program]
-  ) {
+  if (!subjectsMap || !subjectsMap[course] || !subjectsMap[course][program]) {
     subject.style.display = "none";
     return;
   }
 
   subject.style.display = "block";
-
-  universityProgramSubject[uni][course][program].forEach(s => {
+  subjectsMap[course][program].forEach(s => {
     subject.add(new Option(s, s));
   });
-
 });
 
 </script>
