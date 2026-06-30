@@ -398,12 +398,14 @@ class="hfeed site" id="page">
 <form id="syllabusForm">
 <div style="margin-bottom: 15px;">
 <input type="text" name="name" placeholder="Name" style="margin-bottom: 15px;">
-<input type="tel" name="phone" placeholder="Phone Number" style="margin-bottom: 15px;">
+<input type="tel" name="phone" placeholder="Whatsapp Number" style="margin-bottom: 15px;">
 <input type="email" name="email" placeholder="Email" style="margin-bottom: 15px;">
 <select name="state" id="state" onchange="stateChange()" style="margin-bottom: 15px;">
 <option value="" disabled selected hidden>Select State</option>
 </select>
-<select name="universityType" id="universityType" onchange="typeChange()" style="margin-bottom: 15px;">
+<div id="comingSoonMsg" style="display:none; color: #F68156; margin-bottom: 15px; font-size: 14px; font-weight: 500; text-align: center;">Support for other states coming soon.</div>
+<div id="dependentFields">
+<select name="universityType" id="universityType" style="margin-bottom: 15px;">
 <option value="" disabled selected hidden>University Type</option>
 </select>
 <select name="university" id="university" onchange="universityChange()" style="margin-bottom: 15px;">
@@ -418,7 +420,8 @@ class="hfeed site" id="page">
 <select name="subject" id="subject" style="display:none; margin-bottom: 15px;">
 <option value="" disabled selected hidden>Subject</option>
 </select>
-<button type="submit" style="width: 100%;" class="orange-submit-btn" style="width: 100%;">Get Syllabus</button>
+<button type="submit" style="width: 100%;" class="orange-submit-btn">Get Syllabus</button>
+</div>
 </div>
 </form>
 </div>
@@ -457,7 +460,6 @@ document.getElementById("syllabusForm").addEventListener("submit", function (e) 
   if (!data.email || !data.email.trim()) showInputError("email", "Email is required");
   
   if (!data.state) showSelectError("state", "State is required");
-  if (!data.universityType) showSelectError("universityType", "Type is required");
   if (!data.university) showSelectError("university", "University is required");
   if (!data.course) showSelectError("course", "Course is required");
   if (!data.program) showSelectError("program", "Program is required");
@@ -500,8 +502,14 @@ document.getElementById("syllabusForm").addEventListener("submit", function (e) 
     }
     
     if (match && match.syllabusLink1) {
-        // Create elegant overlay
+        // Trigger Download immediately (bypasses popup blockers and stays on page)
+        const docName = `${match.programName || ''}${match.subject ? '_' + match.subject : ''}_Syllabus`;
+        const secureUrl = `/download-syllabus?url=${encodeURIComponent(match.syllabusLink1)}&name=${encodeURIComponent(docName)}`;
+        window.location.href = secureUrl;
+
+        // Create elegant success overlay
         const overlay = document.createElement("div");
+        overlay.className = "overlay-wrapper";
         overlay.style.position = "fixed";
         overlay.style.top = "0";
         overlay.style.left = "0";
@@ -517,62 +525,64 @@ document.getElementById("syllabusForm").addEventListener("submit", function (e) 
         overlay.style.fontFamily = "inherit";
         overlay.style.opacity = "0";
         overlay.style.transition = "opacity 0.4s ease";
-        
-        const spinner = document.createElement("div");
-        spinner.innerHTML = `<svg width="60" height="60" viewBox="0 0 50 50" style="animation: spin 1s linear infinite;"><circle cx="25" cy="25" r="20" fill="none" stroke="#F68156" stroke-width="4" stroke-dasharray="31.4 31.4" stroke-linecap="round"></circle></svg><style>@keyframes spin { 100% { transform: rotate(360deg); } }</style>`;
-        
-        const message = document.createElement("h2");
-        message.style.marginTop = "30px";
-        message.style.color = "#333";
-        message.style.textAlign = "center";
-        message.style.fontWeight = "400";
-        message.style.fontSize = "24px";
-        message.style.lineHeight = "1.5";
-        message.innerHTML = "You are being redirected to an external site in<br><span id='countdown' style='font-size: 72px; font-weight: 700; color: #F68156; display: block; margin-top: 15px;'>3</span>";
-        
-        overlay.appendChild(spinner);
-        overlay.appendChild(message);
+
+        const container = document.createElement("div");
+        container.style.textAlign = "center";
+        container.style.maxWidth = "600px";
+        container.style.padding = "20px";
+        container.style.position = "relative";
+        container.style.zIndex = "2";
+
+        container.innerHTML = `
+            <h2 style="color: #333; font-weight: 600; font-size: 28px; margin-bottom: 30px;">
+                Your syllabus has been downloaded successfully <span style="color:#22c55e;">✔</span>
+            </h2>
+            
+            <p style="color: #666; font-size: 18px; margin-bottom: 20px;">Download our app</p>
+            
+            <div style="display: flex; gap: 20px; justify-content: center; margin-bottom: 40px; flex-wrap: wrap;">
+                <div style="background: #000; color: #fff; padding: 12px 24px; border-radius: 8px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.523 15.3414C17.518 11.2334 20.893 9.25542 21.042 9.16242C19.141 6.38542 16.19 5.96142 15.195 5.83442C12.784 5.58942 10.428 7.25542 9.201 7.25542C7.973 7.25542 6.046 5.86742 4.053 5.89742C1.516 5.93342 -0.835 7.37142 -2.127 9.61942C-4.73 14.1614 -2.83 20.9104 -0.3 24.5514C0.941 26.3374 2.41 28.3244 4.301 28.2574C6.155 28.1884 6.849 27.0654 9.07 27.0654C11.289 27.0654 11.908 28.2574 13.837 28.2224C15.803 28.1884 17.067 26.4384 18.293 24.6364C19.721 22.5454 20.309 20.5184 20.339 20.4074C20.298 20.3894 17.533 19.3414 17.523 15.3414Z"/></svg>
+                    <div style="text-align: left;">
+                        <div style="font-size: 10px; line-height: 1;">Download on the</div>
+                        <div style="font-size: 16px; font-weight: 600; line-height: 1.2;">App Store</div>
+                    </div>
+                </div>
+                <div style="background: #000; color: #fff; padding: 12px 24px; border-radius: 8px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M3.609 1.814L13.792 11.997L3.609 22.181C3.541 22.099 3.5 21.986 3.5 21.854V2.141C3.5 2.009 3.541 1.896 3.609 1.814ZM14.931 10.858L17.72 9.245L4.856 1.815L14.931 10.858ZM15.025 13.048L4.855 22.185L17.72 14.755L15.025 13.048ZM18.57 14.263L20.528 13.132C21.157 12.768 21.157 11.231 20.528 10.867L18.57 9.737L15.938 12L18.57 14.263Z"/></svg>
+                    <div style="text-align: left;">
+                        <div style="font-size: 10px; line-height: 1;">GET IT ON</div>
+                        <div style="font-size: 16px; font-weight: 600; line-height: 1.2;">Google Play</div>
+                    </div>
+                </div>
+            </div>
+            
+            <button onclick="document.body.removeChild(this.closest('.overlay-wrapper'))" style="background: transparent; border: 1px solid #ccc; padding: 10px 24px; border-radius: 4px; cursor: pointer; color: #666; font-size: 16px; transition: 0.2s;" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='transparent'">Close</button>
+        `;
+
+        // SVG Arrow pointing to top right (where Safari/Chrome/Edge show downloads)
+        const arrowSvg = document.createElement("div");
+        arrowSvg.className = "desktop-arrow";
+        arrowSvg.innerHTML = `
+            <svg width="250" height="350" viewBox="0 0 250 350" style="position: absolute; top: 20px; right: 50px; pointer-events: none; z-index: 1000000; overflow: visible;">
+                <!-- Curly hand-drawn style arrow path -->
+                <path d="M 50,300 C 150,300 150,100 235,20" stroke="#F68156" stroke-width="4" fill="none" stroke-linecap="round" />
+                <!-- Arrowhead -->
+                <path d="M 210,30 L 235,20 L 225,45" stroke="#F68156" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <style>
+                @media (max-width: 768px) {
+                    .desktop-arrow { display: none; }
+                }
+            </style>
+        `;
+
+        overlay.appendChild(container);
+        overlay.appendChild(arrowSvg);
         document.body.appendChild(overlay);
         
         // Trigger fade in
         setTimeout(() => { overlay.style.opacity = "1"; }, 10);
-        
-        let counter = 3;
-        const interval = setInterval(() => {
-            counter--;
-            const countSpan = document.getElementById("countdown");
-            if(countSpan) countSpan.textContent = counter;
-            
-            if (counter <= 0) {
-                clearInterval(interval);
-                
-                // Attempt to open in a new tab
-                const newTab = window.open(match.syllabusLink1, '_blank');
-                
-                // If popup is blocked, newTab will be null
-                if (!newTab) {
-                    spinner.style.display = 'none';
-                    message.innerHTML = "Popup blocked.<br>";
-                    const btn = document.createElement("a");
-                    btn.href = match.syllabusLink1;
-                    btn.target = "_blank";
-                    btn.style.cssText = "display: inline-block; margin-top: 20px; padding: 12px 24px; background-color: #F68156; color: #fff; text-decoration: none; border-radius: 4px; font-weight: bold;";
-                    btn.textContent = "Click here to open Syllabus";
-                    btn.onclick = function() {
-                        if (document.body.contains(overlay)) document.body.removeChild(overlay);
-                    };
-                    message.appendChild(btn);
-                } else {
-                    // If successful, hide and remove the overlay
-                    overlay.style.opacity = "0";
-                    setTimeout(() => {
-                        if (document.body.contains(overlay)) {
-                            document.body.removeChild(overlay);
-                        }
-                    }, 400);
-                }
-            }
-        }, 1000);
 
     } else {
                 const btn = document.querySelector('.e-form__buttons button') || document.querySelector('button[type="submit"]');
@@ -2139,15 +2149,12 @@ window.addEventListener("DOMContentLoaded", async () => {
       normalizedUniversityProgramSubject[getUniversityKey(key)] = universityProgramSubject[key];
     });
 
-    // Populate State dropdown dynamically from JSON keys
+    // Populate State dropdown with Bihar and Others
     const stateSelect = document.getElementById("state");
     stateSelect.innerHTML = "<option value='' disabled selected hidden>Select State</option>";
     
-    Object.keys(stateVsUniData).sort().forEach(s => {
-      // Normalize state name for display (e.g. BIHAR -> Bihar)
-      const displayName = s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
-      stateSelect.add(new Option(displayName, s));
-    });
+    stateSelect.add(new Option("Bihar", "BIHAR"));
+    stateSelect.add(new Option("Others", "Others"));
   } catch (err) {
     console.error("Failed to load stateVsUniTypeVsUni.json", err);
   }
@@ -2162,65 +2169,61 @@ function stateChange() {
   uniSelect.innerHTML = "<option value='' disabled selected hidden>Select University</option>";
   document.getElementById("course").innerHTML = "<option value='' disabled selected hidden>Course</option>";
   document.getElementById("program").innerHTML = "<option value='' disabled selected hidden>Program</option>";
+  document.getElementById("subject").innerHTML = "<option value='' disabled selected hidden>Subject</option>";
+  document.getElementById("subject").style.display = "none";
   
   const selectedState = stateSelect.value;
-  if (!selectedState || !stateVsUniData[selectedState]) return;
+  const depFields = document.getElementById("dependentFields");
+  const msg = document.getElementById("comingSoonMsg");
   
-  // Populate University Type dropdown from state keys
-  const types = Object.keys(stateVsUniData[selectedState]).sort();
-  types.forEach(t => {
-    typeSelect.add(new Option(t, t));
-  });
-  // Add "All" option
-  typeSelect.add(new Option("All", "all"));
-}
-
-function typeChange() {
-  const stateSelect = document.getElementById("state");
-  const typeSelect = document.getElementById("universityType");
-  const uniSelect = document.getElementById("university");
+  if (!selectedState) return;
   
-  uniSelect.innerHTML = "<option value='' disabled selected hidden>Select University</option>";
-  document.getElementById("course").innerHTML = "<option value='' disabled selected hidden>Course</option>";
-  document.getElementById("program").innerHTML = "<option value='' disabled selected hidden>Program</option>";
-  
-  const selectedState = stateSelect.value;
-  const selectedType = typeSelect.value;
-  if (!selectedState || !selectedType || !stateVsUniData[selectedState]) return;
-  
-  if (selectedType === "all") {
-    // Collect and de-duplicate universities across all types
-    Object.keys(stateVsUniData[selectedState]).forEach(typeKey => {
-      const unisObj = stateVsUniData[selectedState][typeKey] || {};
-      Object.keys(unisObj).forEach(u => {
-        if (!Array.from(uniSelect.options).some(opt => opt.value === u)) {
-          uniSelect.add(new Option(u, u));
-        }
-      });
-    });
+  if (selectedState === "Others") {
+      if (depFields) depFields.style.display = "none";
+      if (msg) msg.style.display = "block";
+      return;
   } else {
-    const unisObj = stateVsUniData[selectedState][selectedType] || {};
-    Object.keys(unisObj).forEach(u => {
-      uniSelect.add(new Option(u, u));
-    });
+      if (depFields) depFields.style.display = "block";
+      if (msg) msg.style.display = "none";
+  }
+  
+  if (selectedState === "BIHAR") {
+    // Collect all universities for BIHAR
+    if (stateVsUniData[selectedState]) {
+      const unis = [];
+      Object.keys(stateVsUniData[selectedState]).forEach(typeKey => {
+        const typeUnis = stateVsUniData[selectedState][typeKey] || {};
+        Object.keys(typeUnis).forEach(uniName => {
+          unis.push({
+            name: uniName,
+            type: typeKey
+          });
+        });
+      });
+      
+      // Sort alphabetically by name
+      unis.sort((a, b) => a.name.localeCompare(b.name));
+      
+      // Populate University dropdown
+      unis.forEach(uni => {
+        const typeStr = uni.type.replace(/Universities/g, "University");
+        const optionText = `${uni.name} - ${typeStr}`;
+        uniSelect.add(new Option(optionText, uni.name));
+      });
+    }
   }
 }
 
 function getSelectedUniversityData() {
   const state = document.getElementById("state").value;
-  const type = document.getElementById("universityType").value;
   const uni = document.getElementById("university").value;
   
-  if (!state || !uni) return null;
+  if (!state || !uni || !stateVsUniData[state]) return null;
   
-  if (type === "all") {
-    for (const t of Object.keys(stateVsUniData[state])) {
-      if (stateVsUniData[state][t][uni]) {
-        return stateVsUniData[state][t][uni];
-      }
+  for (const t of Object.keys(stateVsUniData[state])) {
+    if (stateVsUniData[state][t] && stateVsUniData[state][t][uni]) {
+      return stateVsUniData[state][t][uni];
     }
-  } else {
-    return stateVsUniData[state][type]?.[uni];
   }
   return null;
 }
@@ -2235,29 +2238,69 @@ function universityChange() {
   subject.innerHTML = "<option value='' disabled selected hidden>Subject</option>";
   subject.style.display = "none";
 
+  const state = document.getElementById("state").value;
+  const uni = document.getElementById("university").value;
+  
+  const typeSelect = document.getElementById("universityType");
+  if (state === "Others" || uni === "Others") {
+    typeSelect.innerHTML = "<option value='Others' selected>Others</option>";
+    typeSelect.value = "Others";
+  } else if (state && uni && stateVsUniData[state]) {
+    const matchedType = Object.keys(stateVsUniData[state]).find(typeKey => 
+        stateVsUniData[state][typeKey] && stateVsUniData[state][typeKey][uni]
+    );
+    if (matchedType) {
+      typeSelect.innerHTML = `<option value="${matchedType}" selected>${matchedType}</option>`;
+      typeSelect.value = matchedType;
+    }
+  }
+
   const uniData = getSelectedUniversityData();
   window.currentUniData = uniData; // Store it for courseChange to use
   
+  const courseFullName = {
+      "UG": "Undergraduate (UG)",
+      "PG": "Postgraduate (PG)",
+      "PRO": "Professional",
+      "INT": "Integrated",
+      "DOC": "Doctoral (PhD)"
+  };
+
   if (uniData && Object.keys(uniData).length > 0) {
     Object.keys(uniData).forEach(level => {
-      course.add(new Option(level, level));
+      let displayName = courseFullName[level] || level;
+      const programsArr = uniData[level];
+      if (programsArr && programsArr.length > 0) {
+          const uniquePrograms = [...new Set(programsArr.map(p => p.programName))].filter(Boolean);
+          if (uniquePrograms.length > 0) {
+              const examples = uniquePrograms.slice(0, 2).join(", ");
+              displayName += ` - ${examples} etc...`;
+          }
+      }
+      course.add(new Option(displayName, level));
     });
   } else {
     // Fallback if no syllabus data exists for this university
     const uni = document.getElementById("university").value;
-    const uniKey = getUniversityKey(uni);
-    const coursesList = normalizedUniversityCourses[uniKey] || ["UG", "PG", "PRO", "INT"];
+    if (uni === "Others") {
+      course.add(new Option("Others", "Others"));
+    } else {
+      const uniKey = getUniversityKey(uni);
+      const coursesList = normalizedUniversityCourses[uniKey] || ["UG", "PG", "PRO", "INT", "DOC"];
     
-    coursesList.forEach(c => {
-      course.add(new Option(
-        c === "UG" ? "UG" :
-        c === "PG" ? "PG" :
-        c === "PRO" ? "PROFESSIONAL" :
-        c === "INT" ? "INTEGRATED" :
-        c === "DOC" ? "Doctoral (PhD)" : c,
-        c
-      ));
-    });
+      coursesList.forEach(c => {
+        let displayName = courseFullName[c] || c;
+        const fallbackPrograms = programs[c]; // from the global hardcoded list
+        if (fallbackPrograms && fallbackPrograms.length > 0) {
+            const uniquePrograms = [...new Set(fallbackPrograms.map(p => typeof p === 'object' ? p.text : p))].filter(Boolean);
+            if (uniquePrograms.length > 0) {
+                const examples = uniquePrograms.slice(0, 2).join(", ");
+                displayName += ` - ${examples} etc...`;
+            }
+        }
+        course.add(new Option(displayName, c));
+      });
+    }
   }
 }
 
@@ -2281,8 +2324,11 @@ function courseChange() {
     });
   } else {
     // Fallback logic for old hardcoded data
-    if (c === "INT") {
-      subject.style.display = "none";
+    if (c === "Others") {
+      program.add(new Option("Others", "Others"));
+    } else {
+      if (c === "INT") {
+        subject.style.display = "none";
     } else {
       subject.style.display = (c === "UG" || c === "PG") ? "block" : "none";
     }
@@ -2294,6 +2340,7 @@ function courseChange() {
         program.add(new Option(p, p));
       }
     });
+    }
   }
 }
 
@@ -2454,6 +2501,11 @@ document.addEventListener("DOMContentLoaded", function() {
     const selects = document.querySelectorAll("#syllabusForm select");
     
     selects.forEach(select => {
+        if (select.id === 'universityType') {
+            select.style.display = "none";
+            return;
+        }
+        
         // Hide original select (but keep it functional for logic)
         select.style.display = "none";
         
@@ -2483,11 +2535,40 @@ document.addEventListener("DOMContentLoaded", function() {
         // Create options container
         const customOptions = document.createElement("div");
         customOptions.className = "custom-options";
+        
+        const searchInput = document.createElement("input");
+        searchInput.type = "text";
+        searchInput.placeholder = "Search...";
+        searchInput.className = "custom-select-search";
+        searchInput.style.cssText = "width: 100%; padding: 10px 16px; border: none; border-bottom: 1px solid var(--ast-border-color, #D1D5DB); outline: none; box-sizing: border-box; font-size: 14px;";
+        
+        const optionsList = document.createElement("div");
+        optionsList.className = "custom-options-list";
+        // Override max-height from .custom-options to optionsList since search is now fixed at top
+        customOptions.style.maxHeight = "none";
+        customOptions.style.overflow = "hidden";
+        optionsList.style.maxHeight = "250px";
+        optionsList.style.overflowY = "auto";
+        
+        customOptions.appendChild(searchInput);
+        customOptions.appendChild(optionsList);
         wrapper.appendChild(customOptions);
+        
+        searchInput.addEventListener("click", e => e.stopPropagation());
+        
+        searchInput.addEventListener("input", function(e) {
+            const filterTerms = e.target.value.toLowerCase().trim().split(/\\s+/);
+            const opts = optionsList.querySelectorAll(".custom-option");
+            opts.forEach(opt => {
+                const text = opt.textContent.toLowerCase();
+                const matches = filterTerms.every(term => text.includes(term));
+                opt.style.display = matches ? "block" : "none";
+            });
+        });
         
         // Function to rebuild options
         const rebuildOptions = () => {
-            customOptions.innerHTML = "";
+            optionsList.innerHTML = "";
             let triggerText = "Select";
             
             // Check visibility based on original select
@@ -2518,13 +2599,23 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
                 const customOption = document.createElement("div");
                 customOption.className = "custom-option";
-                customOption.textContent = option.textContent;
                 customOption.dataset.value = option.value;
+                
+                if ((select.id === "university" || select.id === "course") && option.textContent.includes(" - ")) {
+                    const parts = option.textContent.split(" - ");
+                    customOption.innerHTML = `<span style="display: flex; align-items: center; gap: 4px;"><span>${parts[0]}</span><span style="opacity: 0.5; font-size: 0.85em; font-weight: 400;">- ${parts[1]}</span></span>`;
+                } else {
+                    customOption.textContent = option.textContent;
+                }
                 
                 customOption.addEventListener("click", function(e) {
                     // Update native select
                     select.value = this.dataset.value;
-                    trigger.textContent = this.textContent;
+                    if ((select.id === "university" || select.id === "course") && this.innerHTML.includes("<span")) {
+                        trigger.innerHTML = this.innerHTML;
+                    } else {
+                        trigger.textContent = this.textContent;
+                    }
                     wrapper.classList.remove("open");
                     
                     // Trigger change event on native select so other logic runs
@@ -2533,13 +2624,20 @@ document.addEventListener("DOMContentLoaded", function() {
                     e.stopPropagation();
                 });
                 
-                customOptions.appendChild(customOption);
+                optionsList.appendChild(customOption);
             });
             
             // If native select has a value, update trigger text
             if (select.value) {
                 const selectedOpt = Array.from(select.options).find(o => o.value === select.value);
-                if (selectedOpt) trigger.textContent = selectedOpt.textContent;
+                if (selectedOpt) {
+                    if ((select.id === "university" || select.id === "course") && selectedOpt.textContent.includes(" - ")) {
+                        const parts = selectedOpt.textContent.split(" - ");
+                        trigger.innerHTML = `<span style="display: flex; align-items: center; gap: 4px;"><span>${parts[0]}</span><span style="opacity: 0.5; font-size: 0.85em; font-weight: 400;">- ${parts[1]}</span></span>`;
+                    } else {
+                        trigger.textContent = selectedOpt.textContent;
+                    }
+                }
             } else {
                 trigger.textContent = triggerText;
             }
@@ -2560,7 +2658,12 @@ document.addEventListener("DOMContentLoaded", function() {
             document.querySelectorAll(".custom-select-wrapper").forEach(w => {
                 if (w !== wrapper) w.classList.remove("open");
             });
-            wrapper.classList.toggle("open");
+            const isOpen = wrapper.classList.toggle("open");
+            if (isOpen) {
+                searchInput.value = "";
+                optionsList.querySelectorAll(".custom-option").forEach(opt => opt.style.display = "block");
+                setTimeout(() => searchInput.focus(), 50);
+            }
             e.stopPropagation();
         });
     });

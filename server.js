@@ -3,6 +3,8 @@ const express = require("express");
 const nodemailer = require("nodemailer");
 const cors = require("cors");
 const path = require("path");
+const { PDFDocument, PDFName } = require("pdf-lib");
+const https = require("https");
 
 const app = express();
 app.use(cors());
@@ -10380,6 +10382,10 @@ app.post("/submit", (req, res) => {
 
   /* USER EMAIL */
   if (email) {
+    const host = req.get('host') || 'localhost:3000';
+    const protocol = req.protocol || 'http';
+    const baseDownloadUrl = `${protocol}://${host}/download-syllabus`;
+
     transporter.sendMail({
       from: "Syllabus Team <contactsocialmanish@gmail.com>",
       to: email,
@@ -10392,11 +10398,11 @@ app.post("/submit", (req, res) => {
             ? linkData
                 .map(
                   (l) =>
-                    `<p><a href="${l.url}" target="_blank">${l.title}</a></p>`,
+                    `<p><a href="${baseDownloadUrl}?url=${encodeURIComponent(l.url)}&name=${encodeURIComponent(l.title)}" target="_blank">${l.title}</a></p>`,
                 )
                 .join("")
             : linkData
-              ? `<p><a href="${linkData}" target="_blank">Click here to view your syllabus</a></p>`
+              ? `<p><a href="${baseDownloadUrl}?url=${encodeURIComponent(linkData)}" target="_blank">Click here to view your syllabus</a></p>`
               : `<p>Syllabus link will be shared shortly.</p>`
         }
       `,
@@ -10457,20 +10463,169 @@ app.get("/thankyou", (req, res) => {
         <p>Your form has been submitted successfully.</p>
         <p>Please Contact : <b>+91 8789577123</b></p>
         ${
-          Array.isArray(link)
-            ? link
-                .map(
-                  (l) => `<a href="${l.url}" target="_blank">📘 ${l.title}</a>`,
-                )
-                .join("")
-            : link
-              ? `<a href="${link}" target="_blank">📘 View Your Syllabus</a>`
-              : `<p>Syllabus link not available</p>`
+          (() => {
+            const host = req.get('host') || 'localhost:3000';
+            const protocol = req.protocol || 'http';
+            const baseDownloadUrl = `${protocol}://${host}/download-syllabus`;
+            return Array.isArray(link)
+              ? link
+                  .map(
+                    (l) => `<a href="${baseDownloadUrl}?url=${encodeURIComponent(l.url)}&name=${encodeURIComponent(l.title)}" target="_blank">📘 ${l.title}</a>`,
+                  )
+                  .join("")
+              : link
+                ? `<a href="${baseDownloadUrl}?url=${encodeURIComponent(link)}" target="_blank">📘 View Your Syllabus</a>`
+                : `<p>Syllabus link not available</p>`;
+          })()
         }
       </div>
     </body>
     </html>
   `);
+});
+
+/* ===== PDF WATERMARKING SUPPORT ===== */
+function downloadBuffer(url) {
+  return new Promise((resolve, reject) => {
+    https.get(url, (res) => {
+      if (res.statusCode < 200 || res.statusCode >= 300) {
+        return reject(new Error(`Failed to fetch ${url}: Status ${res.statusCode}`));
+      }
+      const chunks = [];
+      res.on('data', (chunk) => chunks.push(chunk));
+      res.on('end', () => resolve(Buffer.concat(chunks)));
+      res.on('error', (err) => reject(err));
+    }).on('error', (err) => reject(err));
+  });
+}
+
+const logoUrl = 'https://aimdip.org/wp-content/uploads/2026/05/cropped-logo-5.png';
+let logoBuffer = null;
+
+async function getLogoBuffer() {
+  if (logoBuffer) return logoBuffer;
+  try {
+    logoBuffer = await downloadBuffer(logoUrl);
+    return logoBuffer;
+  } catch (err) {
+    console.error("Failed to download logo watermark PNG:", err);
+    throw err;
+  }
+}
+
+// Prefetch logo on startup
+getLogoBuffer().then(() => {
+  console.log("✅ AimDip Logo pre-fetched successfully");
+}).catch(err => {
+  console.warn("⚠️ AimDip Logo pre-fetch failed. Will retry on demand.");
+});
+
+app.get("/download-syllabus", async (req, res) => {
+  const { url, name } = req.query;
+
+  if (!url) {
+    return res.status(400).send("Missing URL parameter");
+  }
+
+  try {
+    console.log(`Watermarking PDF: ${url}`);
+    
+    // 1. Download PDF Buffer
+    const pdfBytes = await downloadBuffer(url);
+
+    // 2. Load PDF into pdf-lib
+    const pdfDoc = await PDFDocument.load(pdfBytes);
+
+    // 3. Get Logo Buffer
+    const logoBytes = await getLogoBuffer();
+
+    // 4. Embed PNG Logo
+    const logoPng = await pdfDoc.embedPng(logoBytes);
+
+    // 5. Watermark all pages
+    const pages = pdfDoc.getPages();
+    const logoWidth = 60;
+    const logoHeight = (265 / 310) * logoWidth; // maintain aspect ratio
+
+    for (const page of pages) {
+      const { width, height } = page.getSize();
+
+      // Top Right
+      const trX = width - logoWidth - 20;
+      const trY = height - logoHeight - 20;
+      page.drawImage(logoPng, {
+        x: trX,
+        y: trY,
+        width: logoWidth,
+        height: logoHeight,
+        opacity: 0.75,
+      });
+
+      // Bottom Left
+      const blX = 20;
+      const blY = 20;
+      page.drawImage(logoPng, {
+        x: blX,
+        y: blY,
+        width: logoWidth,
+        height: logoHeight,
+        opacity: 0.75,
+      });
+
+      // Add Top Right Link Annotation
+      const trLinkAnnot = pdfDoc.context.obj({
+        Type: 'Annot',
+        Subtype: 'Link',
+        Rect: [trX, trY, trX + logoWidth, trY + logoHeight],
+        Border: [0, 0, 0],
+        A: {
+          Type: 'Action',
+          S: 'URI',
+          URI: 'https://aimdip.org',
+        },
+      });
+      const trLinkAnnotRef = pdfDoc.context.register(trLinkAnnot);
+
+      // Add Bottom Left Link Annotation
+      const blLinkAnnot = pdfDoc.context.obj({
+        Type: 'Annot',
+        Subtype: 'Link',
+        Rect: [blX, blY, blX + logoWidth, blY + logoHeight],
+        Border: [0, 0, 0],
+        A: {
+          Type: 'Action',
+          S: 'URI',
+          URI: 'https://aimdip.org',
+        },
+      });
+      const blLinkAnnotRef = pdfDoc.context.register(blLinkAnnot);
+
+      // Resolve and push to Annotations list
+      let annots = page.node.get(PDFName.of('Annots'));
+      if (annots) {
+        annots = pdfDoc.context.lookup(annots);
+      } else {
+        annots = pdfDoc.context.newArray();
+        page.node.set(PDFName.of('Annots'), annots);
+      }
+      annots.push(trLinkAnnotRef);
+      annots.push(blLinkAnnotRef);
+    }
+
+    // 6. Save PDF
+    const modifiedPdfBytes = await pdfDoc.save();
+
+    // 7. Send to browser as attachment
+    const filename = name ? `${name.replace(/[^a-zA-Z0-9]/g, "_")}.pdf` : "syllabus.pdf";
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+    res.send(Buffer.from(modifiedPdfBytes));
+    
+  } catch (err) {
+    console.error(`❌ PDF Watermarking failed for ${url}. Redirecting to original URL...`, err);
+    // FALLBACK: Redirect to the original URL if anything fails
+    res.redirect(url);
+  }
 });
 
 app.listen(3000, () => {
