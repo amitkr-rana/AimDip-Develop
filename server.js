@@ -10485,10 +10485,25 @@ app.get("/thankyou", (req, res) => {
 });
 
 /* ===== PDF WATERMARKING SUPPORT ===== */
-function downloadBuffer(url) {
+const http = require("http");
+
+function downloadBuffer(url, redirectCount = 0) {
   return new Promise((resolve, reject) => {
-    https.get(url, (res) => {
-      if (res.statusCode < 200 || res.statusCode >= 300) {
+    if (redirectCount > 5) return reject(new Error('Too many redirects'));
+
+    const client = url.startsWith('https') ? https : http;
+    const req = client.get(url, (res) => {
+      // Handle redirects
+      if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+        let newUrl = res.headers.location;
+        if (!newUrl.startsWith('http')) {
+            const parsed = new URL(url);
+            newUrl = `${parsed.protocol}//${parsed.host}${newUrl}`;
+        }
+        return resolve(downloadBuffer(newUrl, redirectCount + 1));
+      }
+
+      if (res.statusCode < 200 || res.statusCode >= 400) {
         return reject(new Error(`Failed to fetch ${url}: Status ${res.statusCode}`));
       }
       const chunks = [];
@@ -10496,6 +10511,13 @@ function downloadBuffer(url) {
       res.on('end', () => resolve(Buffer.concat(chunks)));
       res.on('error', (err) => reject(err));
     }).on('error', (err) => reject(err));
+
+    // Strict timeout to prevent Vercel 504 serverless function kills
+    // Vercel Hobby defaults to 10s, so we abort at 7s to allow fallback redirect
+    req.setTimeout(7000, () => {
+      req.destroy();
+      reject(new Error(`Timeout of 7000ms exceeded fetching ${url}`));
+    });
   });
 }
 
